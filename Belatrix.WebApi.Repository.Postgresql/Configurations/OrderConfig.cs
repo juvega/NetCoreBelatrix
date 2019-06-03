@@ -1,7 +1,6 @@
 ﻿using Belatrix.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 
 namespace Belatrix.WebApi.Repository.Postgresql.Configurations
 {
@@ -15,8 +14,27 @@ namespace Belatrix.WebApi.Repository.Postgresql.Configurations
                 .HasColumnName("id")
                 .UseNpgsqlIdentityColumn();
 
-            builder.Property(p => p.CustomerId)
-                .HasColumnName("customer_id")
+            builder.Property(p => p.OrderDate)
+                .HasColumnName("order_date")
+                .IsRequired();
+
+            builder.Property(p => p.OrderNumber)
+                .HasColumnName("order_number")
+                .HasMaxLength(10);
+
+            builder.Property(p => p.TotalAmount)
+                .HasColumnName("total_amount");
+
+            builder.HasIndex(p => p.OrderDate)
+                .HasName("order_date_idx");
+
+            builder.HasIndex(p => p.CustomerId)
+                .HasName("order_customer_id_idx");
+
+            builder.HasOne(o => o.Customer)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .HasConstraintName("customer_id")
                 .IsRequired();
         }
     }

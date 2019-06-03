@@ -41,7 +41,6 @@ namespace Belatrix.WebApi.Repository.Postgresql.Configurations
 
             builder.HasIndex(p => new { p.LastName, p.FirstName })
                 .HasName("customer_name_idx");
-
         }
     }
 }
