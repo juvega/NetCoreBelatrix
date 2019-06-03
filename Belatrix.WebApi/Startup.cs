@@ -1,8 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Belatrix.WebApi.Models;
+using Belatrix.WebApi.Repository;
+using Belatrix.WebApi.Repository.Postgresql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Belatrix.WebApi
 {
@@ -20,6 +31,12 @@ namespace Belatrix.WebApi
         {
             services.AddControllers()
                 .AddNewtonsoftJson();
+
+            services.AddEntityFrameworkNpgsql()
+               .AddDbContext<BelatrixDbContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("postgresql"), b => b.MigrationsAssembly("Belatrix.WebApi")))
+               .BuildServiceProvider();
+
+            services.AddTransient<IRepository<Customer>, Repository<Customer>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
