@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Belatrix.WebApi.Filters;
 using Belatrix.WebApi.Models;
+using Belatrix.WebApi.Profiles;
 using Belatrix.WebApi.Repository;
 using Belatrix.WebApi.Repository.Postgresql;
 using Microsoft.AspNetCore.Builder;
@@ -29,16 +32,28 @@ namespace Belatrix.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddAutoMapper();
+
             services.AddControllers()
                 .AddNewtonsoftJson();
 
             services.AddEntityFrameworkNpgsql()
                .AddDbContext<BelatrixDbContext>(
-                opt => opt.UseNpgsql(Configuration.GetConnectionString("postgresql"), 
+                opt => opt.UseNpgsql(Configuration.GetConnectionString("postgresql"),
                 b => b.MigrationsAssembly("Belatrix.WebApi")))
                .BuildServiceProvider();
 
             services.AddTransient<IRepository<Customer>, Repository<Customer>>();
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new CustomerProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddScoped<CustomerResultFilterAttribute>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

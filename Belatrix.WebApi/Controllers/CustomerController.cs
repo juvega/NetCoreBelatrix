@@ -1,4 +1,6 @@
-﻿using Belatrix.WebApi.Models;
+﻿using AutoMapper;
+using Belatrix.WebApi.Filters;
+using Belatrix.WebApi.Models;
 using Belatrix.WebApi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,13 +13,16 @@ namespace Belatrix.WebApi.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly IRepository<Customer> _repository;
-        public CustomerController(IRepository<Customer> repository)
+        private readonly IMapper _mapper;
+        public CustomerController(IRepository<Customer> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        [ServiceFilter(typeof(CustomerResultFilterAttribute))]
+        public async Task<ActionResult<IEnumerable<DTO.Customer>>> GetCustomers()
         {
             return Ok(await _repository.Read());
         }
