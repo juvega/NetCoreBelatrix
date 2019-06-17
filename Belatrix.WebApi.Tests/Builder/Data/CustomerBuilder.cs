@@ -10,12 +10,18 @@ namespace Belatrix.WebApi.Tests.Builder.Data
     {
         public BelatrixDbContextBuilder AddTenCustomers()
         {
-            AddCustomers(_context);
+            AddCustomers(_context, 10);
             return this;
         }
-        private void AddCustomers(BelatrixDbContext context)
+        private void AddCustomers(BelatrixDbContext context, int quantity)
         {
-            var customerList = A.ListOf<Models.Customer>(10);
+            var customerList = A.ListOf<Models.Customer>(quantity);
+
+            for (int i = 1; i <= quantity; i++)
+            {
+                customerList[i - 1].Id = i;
+            }
+
             context.Customer.AddRange(customerList);
             context.SaveChanges();
         }
