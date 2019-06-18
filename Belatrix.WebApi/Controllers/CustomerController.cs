@@ -19,7 +19,7 @@ namespace Belatrix.WebApi.Controllers
               
         [HttpGet]
         [CustomerResultFilter]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<ViewModels.Customer>>> GetCustomers()
         {
             return Ok(await _repository.Read());
         }

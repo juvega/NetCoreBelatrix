@@ -6,7 +6,7 @@ namespace Belatrix.WebApi.Profiles
     {
         public CustomerProfile()
         {
-            CreateMap<Models.Customer, ResultModels.Customer>();
+            CreateMap<Models.Customer, ViewModels.Customer>();
         }
     }
 }

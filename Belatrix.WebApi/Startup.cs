@@ -45,7 +45,7 @@ namespace Belatrix.WebApi
                 .AddNewtonsoftJson();
 
             services.AddEntityFrameworkNpgsql()
-               .AddDbContext<BelatrixDbContext>(
+               .AddDbContextPool<BelatrixDbContext>(
                 opt => opt.UseNpgsql(Configuration.GetConnectionString("postgresql"),
                 b => b.MigrationsAssembly("Belatrix.WebApi")))
                .BuildServiceProvider();
@@ -59,6 +59,7 @@ namespace Belatrix.WebApi
                     Title = "Belatrix API",
                     Version = "v1"
                 });
+                c.CustomSchemaIds(x => x.FullName);
             });
         }
 

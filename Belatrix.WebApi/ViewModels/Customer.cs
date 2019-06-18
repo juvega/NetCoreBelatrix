@@ -1,4 +1,4 @@
-﻿namespace Belatrix.WebApi.ResultModels
+﻿namespace Belatrix.WebApi.ViewModels
 {
     public class Customer
     {

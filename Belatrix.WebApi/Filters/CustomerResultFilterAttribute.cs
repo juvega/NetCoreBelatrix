@@ -19,7 +19,7 @@ namespace Belatrix.WebApi.Filters
                 return;
             }
 
-            resultFromAction.Value = Mapper.Map<IEnumerable<ResultModels.Customer>>(resultFromAction.Value);
+            resultFromAction.Value = Mapper.Map<IEnumerable<ViewModels.Customer>>(resultFromAction.Value);
 
             await next();
         }
